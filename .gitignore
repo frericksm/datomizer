@@ -1,17 +1,5 @@
-# Ignore bundler & gem stuff
-*.gem
-.bundle
-Gemfile.lock
-pkg/*
-
-# Ignore db
-/db
-/vendor/datomic
-
-# Ignore all logfiles and tempfiles.
-/log
-/tmp
-/clojure/target/
-clojure/.lein-failures
-clojure/.lein-repl-history
-clojure/pom.xml
+/target
+.lein-failures
+.lein-repl-history
+pom.xml
+scratch
