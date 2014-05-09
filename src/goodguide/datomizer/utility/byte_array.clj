@@ -1,4 +1,4 @@
-(ns datomizer.utility.byte-array
+(ns goodguide.datomizer.utility.byte-array
   "Functions for handling byte-arrays more gracefully.")
 
 (defn seq-if-byte-array [x]

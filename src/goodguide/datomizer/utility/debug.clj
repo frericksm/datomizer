@@ -1,4 +1,4 @@
-(ns datomizer.utility.debug
+(ns goodguide.datomizer.utility.debug
   "Debugging tools."
   (:require [clojure.pprint :refer [pprint]]))
 

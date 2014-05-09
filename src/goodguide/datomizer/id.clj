@@ -1,7 +1,7 @@
-(ns datomizer.id
+(ns goodguide.datomizer.id
   "Autoincrement numeric id."
   (:require [datomic.api :refer [q]]
-            [datomizer.utility.debug :refer [dbg]]))
+            [goodguide.datomizer.utility.debug :refer [dbg]]))
 
 (defn autoincrement [db datomic-id numeric-id-attribute value]
   (let [numeric-id (or value

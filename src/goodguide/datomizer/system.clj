@@ -1,8 +1,8 @@
-(ns datomizer.system
+(ns goodguide.datomizer.system
   "Running datomizer system (mostly for development)"
   (:require [datomic.api :as d]
-            [datomizer.datomize-test :as dzt]
-            [datomizer.datomize.setup :as dzs]))
+            [goodguide.datomizer.datomize-test :as dzt]
+            [goodguide.datomizer.datomize.setup :as dzs]))
 
 (defn system
   "Returns a new instance of the application"

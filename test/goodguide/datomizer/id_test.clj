@@ -1,8 +1,8 @@
-(ns datomizer.id-test
-  (:require [datomizer.id :refer :all]
+(ns goodguide.datomizer.id-test
+  (:require [goodguide.datomizer.id :refer :all]
             [clojure.test :refer :all]
             [datomic.api :as d :refer [q db]]
-            [datomizer.test-utility.db :refer [test-db-conn]]))
+            [goodguide.datomizer.test-utility.db :refer [test-db-conn]]))
 
 (def test-schema
   [{:db/id (d/tempid :db.part/db)

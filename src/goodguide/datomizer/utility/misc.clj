@@ -1,4 +1,4 @@
-(ns datomizer.utility.misc
+(ns goodguide.datomizer.utility.misc
   "Junk drawer of useful functions."
   (:require [datomic.api :as d]))
 

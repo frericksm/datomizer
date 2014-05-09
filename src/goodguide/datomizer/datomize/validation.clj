@@ -1,4 +1,4 @@
-(ns datomizer.datomize.validation
+(ns goodguide.datomizer.datomize.validation
   "Short package description."
   (:require [datomic.api :as d :refer [q]]))
 

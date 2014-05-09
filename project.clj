@@ -1,4 +1,4 @@
-(defproject datomizer "0.1.0-SNAPSHOT"
+(defproject com.goodguide/datomizer "0.1.0-SNAPSHOT"
   :description "Simple Datomic adapter and marshalling for JRuby"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.datomic/datomic-pro "0.9.4707"]

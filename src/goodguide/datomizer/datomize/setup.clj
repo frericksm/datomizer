@@ -1,6 +1,6 @@
-(ns datomizer.datomize.setup
+(ns goodguide.datomizer.datomize.setup
   (:require [datomic.api :as d :refer [db]]
-            [datomizer.utility.misc :refer :all]))
+            [goodguide.datomizer.utility.misc :refer :all]))
 
 (defn load-datomizer-schema
   "Load the schema used by datomizer."
@@ -13,7 +13,7 @@
   [conn]
   (load-datoms-from-edn-resource-file conn "datomizer-functions.edn"))
 
-(comment
-  ;; Use like this:
-  @(d/transact conn [[:dmzr/datomize {:db/id (d/tempid :db.part/user) :test/map {:a 1}}]])
-  (undatomize (d/entity (db conn) 17592186046111)))
+(defn install-datomizer [conn]
+  "Install datomizer schema and functions."
+  (load-datomizer-schema conn)
+  (load-datomizer-functions conn))

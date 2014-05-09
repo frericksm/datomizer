@@ -12,12 +12,12 @@
    [clojure.test :as test]
    [clojure.tools.namespace.repl :refer (refresh refresh-all)]
    [datomic.api :as d :refer [db q]]
-   [datomizer.system :as system]
-   [datomizer.utility.debug :refer :all]
-   [datomizer.datomize-test :refer :all]
-   [datomizer.datomize.decode :refer :all]
-   [datomizer.datomize.encode :refer :all]
-   [datomizer.datomize-test :refer :all]
+   [goodguide.datomizer.system :as system]
+   [goodguide.datomizer.utility.debug :refer :all]
+   [goodguide.datomizer.datomize-test :refer :all]
+   [goodguide.datomizer.datomize.decode :refer :all]
+   [goodguide.datomizer.datomize.encode :refer :all]
+   [goodguide.datomizer.datomize-test :refer :all]
    ))
 
 (def system nil)
@@ -58,7 +58,7 @@
 
 (defn run-datomizer-tests
   []
-  (clojure.test/run-all-tests #"^datomizer.*"))
+  (clojure.test/run-all-tests #"^goodguide.datomizer.*"))
 
 (defn t []
   (refresh :after 'user/run-datomizer-tests))

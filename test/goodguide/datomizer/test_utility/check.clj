@@ -1,13 +1,13 @@
-(ns datomizer.test-utility.check
+(ns goodguide.datomizer.test-utility.check
   "Tests for datomize."
   (:require [clojure.pprint :refer [pprint]]
             [clojure.test :refer :all]
             [datomic.api :as d :refer [db]]
-            [datomizer.datomize.decode :refer :all]
-            [datomizer.datomize.encode :refer :all]
-            [datomizer.datomize.setup :refer :all]
-            [datomizer.datomize.validation :refer :all]
-            [datomizer.utility.byte-array :refer :all]
+            [goodguide.datomizer.datomize.decode :refer :all]
+            [goodguide.datomizer.datomize.encode :refer :all]
+            [goodguide.datomizer.datomize.setup :refer :all]
+            [goodguide.datomizer.datomize.validation :refer :all]
+            [goodguide.datomizer.utility.byte-array :refer :all]
             [clojure.test.check.clojure-test :refer [defspec]]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop]))

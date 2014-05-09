@@ -1,9 +1,9 @@
-(ns datomizer.datomize.encode
+(ns goodguide.datomizer.datomize.encode
   "Encode entities by datomizing their data-structures."
   (:require [datomic.api :as d :refer [q]]
-            [datomizer.datoms :refer :all]
-            [datomizer.utility.debug :refer :all]
-            [datomizer.utility.misc :refer [ref-type]]))
+            [goodguide.datomizer.datoms :refer :all]
+            [goodguide.datomizer.utility.debug :refer :all]
+            [goodguide.datomizer.utility.misc :refer [ref-type]]))
 
 
 (defprotocol DatomizerValue

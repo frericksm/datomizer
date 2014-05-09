@@ -1,7 +1,7 @@
-(ns datomizer.datomize.decode
+(ns goodguide.datomizer.datomize.decode
   "Decode datomized entities."
-  (:require [datomizer.utility.debug :refer :all]
-            [datomizer.utility.misc :refer [ref-type first-matching]]))
+  (:require [goodguide.datomizer.utility.debug :refer :all]
+            [goodguide.datomizer.utility.misc :refer [ref-type first-matching]]))
 
 (defn element-key-attribute
   "Return an element's key attribute"

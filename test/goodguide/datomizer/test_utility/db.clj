@@ -1,7 +1,7 @@
-(ns datomizer.test-utility.db
+(ns goodguide.datomizer.test-utility.db
   "Test database setup."
   (:require [datomic.api :as d]
-            [datomizer.datomize.setup :refer [load-datomizer-functions
+            [goodguide.datomizer.datomize.setup :refer [load-datomizer-functions
                                               load-datomizer-schema]]))
 
 (defonce test-database (atom nil))
