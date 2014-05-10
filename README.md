@@ -8,7 +8,7 @@ attributes.
 
 SHOUTY DISCLAIMER: THIS IS AN EXPERIMENT.  WE'RE NOT USING THIS IN
 PRODUCTION YET, AND YOU PROBABLY SHOULDN'T EITHER.  IT PROBABLY HAS SOME
-MISTAKES AND MAY PERFORM TERRRIBLY.
+MISTAKES AND MAY PERFORM TERRIBLY.
 
 We wouldn't even call this Alpha software yet.
 
@@ -21,11 +21,11 @@ components: datoms.  A datom is a fact about the value of an attribute
 of an entity at a specific time.
 
 Datomic values can be of various types: strings, numbers, keywords, byte
-arrays, moments in time, references to other objects, etc.  They
-can be a single value or a set of values.  An attribute's
-definition specifies the type and cardinality of values assignable to
-it.  Values with "multiple" cardinality can hold more that one value,
-but they *record no order*.  (That is, they're *sets* of values.)
+arrays, moments in time, references to other objects, etc.  They can be
+a single value or a set of values.  An attribute's definition specifies
+the type and cardinality of values assignable to it.  Values with
+"multiple" cardinality can hold more that one value, but they *record no
+order*.  (That is, they're *sets* of values, not vectors.)
 
 But what if your data is complex?  What if it's an *ordered* vector of
 values?  What if it's a map with keys you don't know in advance?  What
@@ -38,8 +38,8 @@ implement it ourselves.
 ### Two Strategies
 
 There are two obvious approaches to storing complex data in Datomic:
-serialization (converting the data to a string or binary format and
-storing it as a single value) and what we will call "datomization":
+**serialization**, converting the data to a string or binary format and
+storing it as a single value, and what we will call "**datomization**",
 breaking the structure up into entities that represent the elements of
 the collection.
 
@@ -51,22 +51,21 @@ back out.  We could do this with EDN, or perhaps JSON, XML or Fressian.
 
 The problem with serialization is that the serialized strings or
 byte-arrays are not intelligible to Datomic.  Their contents cannot be
-queried without de-serialization with database functions in
-the query, which will probably be slow.
+referenced in queries (without de-serialization using database
+functions, which will probably be slow.)
 
 #### Datomization
 
-For "Datomization", we traverse the data structure and generate a set of
-datoms to represent it.  A map is recorded as a reference attribute with
+For "datomization", we traverse the data structure and represent it as a
+set of datoms.  A map is recorded as a reference attribute with
 cardinality many pointing to a set of entities representing pairs,
-featuring key and value attribues.  A vector is similar, but is keyed
-by numbers.  There is a variety of value attributes to allow
-heterogenous collections.  Map and vector attributes allow nesting.
-Variants refer to a single entity bearing a value attribute (and no
-key).
+featuring key and value attributes.  A vector is similar, but is keyed by
+numbers.  There is a variety of value attributes to allow heterogeneous
+collections.  Map and vector attributes allow nesting.  Variants refer
+to a single entity bearing a value attribute (and no key).
 
 "Un-datomization" reverses this process, rebuilding a complex data
-structure from its representation as Datomic entities.
+structure from its datomized representation.
 
 ##### Updates
 
@@ -83,35 +82,42 @@ the currently stored value and the new value, then apply the minimum set
 of additions and retractions necessary to update the value in place.
 
 In order to guarantee that modifications to existing values are done
-correctly, we need to do them in a transaction function.  If we were to
+correctly, we *must* do them in a transaction function.  If we were to
 read the current state in a peer process, then make a modification based
 on the read, we would have no guarantee that the read state was still
 accurate at the time the modification is applied.  This might corrupt
 our data structure.
 
-Performing the update correctly requires running it on the transactor.
+Performing the update correctly requires running it on the transactor,
+which means that Datomizer needs to be on its classpath.
 
-## OK, this sounds fun!  How do I install it?
+## OK, Datomizer sounds fun!  How do I install it?
 
 Datomizer is a library of Clojure functions designed to run both on the
-peer and on the transactor.  It needs to be in each process's
-classpath.  To load the library on the transactor Putting the datomizer.jar
-file in *root-of-your-datomic-installation*/lib before startup.
+peer and on the transactor.  It needs to be in each process's classpath.
 
-Before using Datomizer, you'll need to create the schema it uses.
+Add Datomizer to your the dependencies in your project.clj:
 
-Datomizer's schema is namespaced under "dmzr"
+```clojure
+(defproject datomizer-example "0.1.0-SNAPSHOT"
+  :dependencies [[org.clojure/clojure "1.5.1"]
+                 [com.datomic/datomic-pro "0.9.4707"]
+                 [com.goodguide/datomizer "0.1.0-SNAPSHOT"]])
+```
 
-Add datomizer to your the dependencies in your project.clj.
+(To make the datomic-pro library available to leiningen, you may need to install it in your local maven repository by running $WHEREVER-YOU-INSTALLED-DATOMIC/bin/maven-install) 
 
-Get Datomizer from the maven repo, and put it on your datomic transactor's classpath.
+Get Datomizer from the repository, and put it on your datomic transactor's classpath:
 
 ```bash
 lein deps
 cp ~/.m2/repository/com/goodguide/datomizer/0.1.0-SNAPSHOT/datomizer-0.1.0-SNAPSHOT.jar $WHEREVER-YOU-INSTALLED-DATOMIC/lib/
 ```
 
-(start datomic transactor)
+Then (re-)start datomic transactor.
+
+Before using Datomizer, you'll need to create the schema it uses.
+Datomizer's schema is name spaced under "dmzr"
 
 Start a repl for your app and install the Datomizer schema:
 
@@ -121,27 +127,15 @@ Start a repl for your app and install the Datomizer schema:
 (require '[goodguide.datomizer.datomize.setup :as setup])
 
 (def db-uri "datomic:mem://example") ; or wherever
-
-(def map-attribute {:db/id (d/tempid :db.part/db)
-                    :db/ident :test/map
-                    :db/valueType :db.type/ref
-                    :db/cardinality :db.cardinality/many
-                    :db/unique :db.unique/value
-                    :db/doc "A map attribute for Datomization demonstration."
-                    :db/isComponent true
-                    :dmzr.ref/type :dmzr.type/map
-                    :db.install/_attribute :db.part/db})
-
-  (d/create-database db-uri) ; if necessary
-  (def conn (d/connect db-uri))
-  (setup/install-datomizer conn)
-  @(d/transact conn [map-attribute])
+(d/create-database db-uri) ; if necessary
+(def conn (d/connect db-uri))
+(setup/install-datomizer conn)
 
 ```
 
 ## OK, it's installed.  How do I use it?
 
-Here's an example of how to use it: src/goodguide/datomizer/example/core.clj
+Here's an example: src/goodguide/datomizer/example/core.clj
 
 Play around with it in your repl.
 
@@ -172,25 +166,29 @@ user>
 
 Er... that's probably a bad idea.
 
-XXXX Talk here about why it's often better to define lots of attributes
-rather than using maps.
+A lot of Datomic's expressive power comes from the flexibility of it
+schema.  It's not schema-less, but arbitrary attribute values can be
+attached to entities.  If you find yourself wanting to create a lot of
+map values that use the same keys over and over, ask yourself whether
+the keys should be attributes.  You don't need Datomizer to map
+attributes to values.
 
-## What's the deal this "nil" value?
+## Hey, what's the deal this "nil" value?
 
 In Datomic, the idiomatic way to represent absence of an attribute-value
 on an entity is to... not add a fact assigning the attribute-value to
-the entity.  Or to retract it, if it exists.  Absence of a fact is
-represented by absence of a fact.
+the entity.  (Or to retract it, if it exists.)  Absence of a fact is
+represented by... absence of a fact.
 
 In relational databases using tables, a special "NULL" value is needed
 to represent information missing from a record because there's no other
 way to omit a field.  Each column is present for every row.
 
 Since Datomic lets us attach arbitrary attribute-values to any entity, a
-special NULL value is unneeded.
+special NULL value is not needed.
 
-However: It may be necessary for whatever reason to represent data
-structures containing nulls.  Your application might use maps with
+However: It may be necessary (for whatever weird reason) to represent
+data structures containing nulls.  Your application might use maps with
 keys pointing to nil or vectors containing nils.  Datomizer uses the
 :dmzr.element.value/nil attribute with a value of (the keyword) :NIL to
 represent these.
