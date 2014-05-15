@@ -135,7 +135,7 @@ Start a repl for your app and install the Datomizer schema:
 
 ## OK, it's installed.  How do I use it?
 
-Here's an example: src/goodguide/datomizer/example/core.clj
+Here's an example: [src/goodguide/datomizer/example/core.clj](https://github.com/GoodGuide/datomizer/blob/master/src/goodguide/datomizer/example/core.clj)
 
 Play around with it in your repl.
 
