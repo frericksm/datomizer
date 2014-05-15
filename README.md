@@ -24,8 +24,9 @@ Datomic values can be of various types: strings, numbers, keywords, byte
 arrays, moments in time, references to other objects, etc.  They can be
 a single value or a set of values.  An attribute's definition specifies
 the type and cardinality of values assignable to it.  Values with
-"multiple" cardinality can hold more that one value, but they *record no
-order*.  (That is, they're *sets* of values, not vectors.)
+"multiple" cardinality can hold more that one value, but note that they
+*record no order*.  (That is, they're unordered *sets* of values, not
+vectors.)
 
 But what if your data is complex?  What if it's an *ordered* vector of
 values?  What if it's a map with keys you don't know in advance?  What
@@ -56,26 +57,26 @@ functions, which will probably be slow.)
 
 #### Datomization
 
-For "datomization", we traverse the data structure and represent it as a
-set of datoms.  A map is recorded as a reference attribute with
-cardinality many pointing to a set of entities representing pairs,
-featuring key and value attributes.  A vector is similar, but is keyed by
-numbers.  There is a variety of value attributes to allow heterogeneous
-collections.  Map and vector attributes allow nesting.  Variants refer
-to a single entity bearing a value attribute (and no key).
+In "datomization", we traverse the data structure and build a
+representation of it as a set of datoms.  A map is recorded as a
+reference attribute with cardinality "many" pointing to a set of
+entities representing pairs, featuring key and value attributes.  A
+vector is similar, but is keyed by numbers instead of keywords.  There
+is a variety of value attributes to allow heterogeneous collections.
+Map and vector attributes allow nesting.  Variants refer to a single
+entity bearing a value attribute (and no key).
 
 "Un-datomization" reverses this process, rebuilding a complex data
 structure from its datomized representation.
 
 ##### Updates
 
-A tricky bit is updating a previously datomized value.  We *could*
+Updating a previously datomized value is a bit tricky.  We *could*
 simply retract all of the value's component entities, then create a new
 value from scratch, but this would add a lot of noise to the value's
 history.  We would see a lot of retractions and additions of equivalent
-elements.  This would make understanding a complex value's history (for
-instance, tracking changes by annotating transactions with the user's
-id) difficult.  
+elements.  This would make understanding a complex value's history
+difficult.
 
 Instead of wholesale retraction and re-addition, we do a diff between
 the currently stored value and the new value, then apply the minimum set
@@ -105,19 +106,22 @@ Add Datomizer to your the dependencies in your project.clj:
                  [com.goodguide/datomizer "0.1.0-SNAPSHOT"]])
 ```
 
-(To make the datomic-pro library available to leiningen, you may need to install it in your local maven repository by running $WHEREVER-YOU-INSTALLED-DATOMIC/bin/maven-install) 
+(To make the datomic-pro library available to leiningen, you may need to
+install it in your local maven repository by running
+$WHEREVER-YOU-INSTALLED-DATOMIC/bin/maven-install)
 
-Get Datomizer from the repository, and put it on your datomic transactor's classpath:
+Get Datomizer from the repository, and put it on your datomic
+transactor's classpath:
 
 ```bash
 lein deps
 cp ~/.m2/repository/com/goodguide/datomizer/0.1.0-SNAPSHOT/datomizer-0.1.0-SNAPSHOT.jar $WHEREVER-YOU-INSTALLED-DATOMIC/lib/
 ```
 
-Then (re-)start datomic transactor.
+Then (re-)start the Datomic transactor.
 
 Before using Datomizer, you'll need to create the schema it uses.
-Datomizer's schema is name spaced under "dmzr"
+Datomizer's schema is name-spaced under "dmzr"
 
 Start a repl for your app and install the Datomizer schema:
 
@@ -137,7 +141,7 @@ Start a repl for your app and install the Datomizer schema:
 
 Here's an example: [src/goodguide/datomizer/example/core.clj](https://github.com/GoodGuide/datomizer/blob/master/src/goodguide/datomizer/example/core.clj)
 
-Play around with it in your repl.
+Try it out in your repl:
 
 ```
 ; CIDER 0.6.0snapshot (Clojure 1.6.0, nREPL 0.2.3)
@@ -166,12 +170,12 @@ user>
 
 Er... that's probably a bad idea.
 
-A lot of Datomic's expressive power comes from the flexibility of it
-schema.  It's not schema-less, but arbitrary attribute values can be
+A lot of Datomic's expressiveness comes from the flexibility of its
+schema.  It's **not** schema-less, but arbitrary attribute values can be
 attached to entities.  If you find yourself wanting to create a lot of
 map values that use the same keys over and over, ask yourself whether
-the keys should be attributes.  You don't need Datomizer to map
-attributes to values.
+the keys just should be Datomic attributes.  You don't need Datomizer to
+map attributes to values.
 
 ## Hey, what's the deal this "nil" value?
 
@@ -184,8 +188,8 @@ In relational databases using tables, a special "NULL" value is needed
 to represent information missing from a record because there's no other
 way to omit a field.  Each column is present for every row.
 
-Since Datomic lets us attach arbitrary attribute-values to any entity, a
-special NULL value is not needed.
+Since Datomic lets us compose entities with arbitrary sets of
+attribute-values, a special NULL value is not needed.
 
 However: It may be necessary (for whatever weird reason) to represent
 data structures containing nulls.  Your application might use maps with
@@ -193,11 +197,11 @@ keys pointing to nil or vectors containing nils.  Datomizer uses the
 :dmzr.element.value/nil attribute with a value of (the keyword) :NIL to
 represent these.
 
-(Note that there's probably not a great reason to create a variant with a
-:dmzr.element.value/nil value.)
+(Note that there's probably not a great reason to create a variant with
+a :dmzr.element.value/nil value.)
 
 ## OK, what about performance?
 
-We haven't used this at any real scale yet.  It may perform poorly for some
-use cases.  This is an experiment and we're still playing with it.  Let
-us know what you discover.
+We haven't used this at any real scale yet.  It may perform poorly for
+many use cases.  This is an experiment and we're still playing with it.
+Let us know what you discover.
