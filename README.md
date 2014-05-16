@@ -103,7 +103,7 @@ Add Datomizer to your the dependencies in your project.clj:
 (defproject datomizer-example "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [com.datomic/datomic-pro "0.9.4707"]
-                 [com.goodguide/datomizer "0.1.0-SNAPSHOT"]])
+                 [com.goodguide/datomizer "0.1.0"]])
 ```
 
 (To make the datomic-pro library available to leiningen, you may need to
@@ -115,7 +115,7 @@ transactor's classpath:
 
 ```bash
 lein deps
-cp ~/.m2/repository/com/goodguide/datomizer/0.1.0-SNAPSHOT/datomizer-0.1.0-SNAPSHOT.jar $WHEREVER-YOU-INSTALLED-DATOMIC/lib/
+cp ~/.m2/repository/com/goodguide/datomizer/0.1.0/datomizer-0.1.0.jar $WHEREVER-YOU-INSTALLED-DATOMIC/lib/
 ```
 
 Then (re-)start the Datomic transactor.
@@ -205,3 +205,17 @@ a :dmzr.element.value/nil value.)
 We haven't used this at any real scale yet.  It may perform poorly for
 many use cases.  This is an experiment and we're still playing with it.
 Let us know what you discover.
+
+## Who owns this code?  How am I allowed to use it?
+
+Datomizer is copyright (c) GoodGuide.  All rights reserved.
+
+The use and distribution terms for this software are covered by the
+Eclipse Public License 1.0
+(http://opensource.org/licenses/eclipse-1.0.php) which can be found in
+the file epl-v10.html at the root of this distribution.
+
+By using this software in any fashion, you are agreeing to be bound by
+the terms of this license.
+
+You must not remove this notice, or any other, from this software.
