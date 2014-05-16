@@ -4,7 +4,9 @@
 
 Datomizer is a library that helps you store complex data structures
 (e.g. nested maps and vectors) in Datomic.  It also implements "variant"
-attributes.
+attributes.  
+
+Datomizer is inspired by [earlier experiments](https://gist.github.com/cemerick/3e615a4d42b88ccefdb4) by [Chas Emerick](https://gist.github.com/cemerick).  Thanks, Chas!
 
 SHOUTY DISCLAIMER: THIS IS AN EXPERIMENT.  WE'RE NOT USING THIS IN
 PRODUCTION YET, AND YOU PROBABLY SHOULDN'T EITHER.  IT PROBABLY HAS SOME
