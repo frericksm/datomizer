@@ -103,7 +103,7 @@ Add Datomizer to your the dependencies in your project.clj:
 (defproject datomizer-example "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [com.datomic/datomic-pro "0.9.4707"]
-                 [com.goodguide/datomizer "0.1.0-SNAPSHOT"]])
+                 [com.goodguide/datomizer "0.1.0"]])
 ```
 
 (To make the datomic-pro library available to leiningen, you may need to
@@ -115,7 +115,7 @@ transactor's classpath:
 
 ```bash
 lein deps
-cp ~/.m2/repository/com/goodguide/datomizer/0.1.0-SNAPSHOT/datomizer-0.1.0-SNAPSHOT.jar $WHEREVER-YOU-INSTALLED-DATOMIC/lib/
+cp ~/.m2/repository/com/goodguide/datomizer/0.1.0/datomizer-0.1.0.jar $WHEREVER-YOU-INSTALLED-DATOMIC/lib/
 ```
 
 Then (re-)start the Datomic transactor.

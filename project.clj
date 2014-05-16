@@ -1,4 +1,4 @@
-(defproject com.goodguide/datomizer "0.1.0-SNAPSHOT"
+(defproject com.goodguide/datomizer "0.1.0"
   :description "Simple Datomic adapter and marshalling for JRuby"
   :license {:name "Eclipse Public License - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"
