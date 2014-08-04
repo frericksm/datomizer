@@ -1,5 +1,6 @@
 /target
 .lein-failures
 .lein-repl-history
+.lein_profiles.clj
 pom.xml
 scratch
