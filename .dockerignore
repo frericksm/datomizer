@@ -1,0 +1,6 @@
+.git
+.gitignore
+.lein-failures
+.lein-repl-history
+scratch
+target
